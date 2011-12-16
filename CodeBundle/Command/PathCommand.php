@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class FilePathCommand extends ContainerAwareCommand
+class PathCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
@@ -23,16 +23,10 @@ class FilePathCommand extends ContainerAwareCommand
         // gather arguments
         $lookup = $input->getArgument('lookup');
 
-        // access services
         $container = $this->getContainer();
-        $parser = $container->get('templating.name_parser');
-        $locator = $container->get('file_locator');
+        $controller = $container->get('bp.code.helpers');
 
-        // template logicalName to symfony path
-        $template_reference = $parser->parse($lookup);
-        $sf_path = $template_reference->getPath();
-        $file_path = $locator->locate($sf_path);
-
+        $file_path = $controller->pathAction($lookup);
         $output->writeln($file_path);
     }
 }
