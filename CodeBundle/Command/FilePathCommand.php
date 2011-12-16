@@ -12,16 +12,27 @@ class FilePathCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('code:browse:file')
-            ->setDescription('Returns the filepath of given class')
-            ->addArgument('class', InputArgument::REQUIRED, 'What class are you looking for?')
+            ->setName('code:path')
+            ->setDescription('Returns the absolute file path given template logical name')
+            ->addArgument('lookup', InputArgument::REQUIRED, 'What template are you looking for?')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $class = $input->getArgument('class');
+        // gather arguments
+        $lookup = $input->getArgument('lookup');
 
-        $output->writeln($class);
+        // access services
+        $container = $this->getContainer();
+        $parser = $container->get('templating.name_parser');
+        $locator = $container->get('file_locator');
+
+        // template logicalName to symfony path
+        $template_reference = $parser->parse($lookup);
+        $sf_path = $template_reference->getPath();
+        $file_path = $locator->locate($sf_path);
+
+        $output->writeln($file_path);
     }
 }
