@@ -13,22 +13,26 @@ class LocateCommand extends ContainerAwareCommand
     {
         $this
             ->setName('code:resource:locate')
-            ->setDescription('Returns the filesystem absolute path for named resource')
-            ->addArgument('resource_name', InputArgument::REQUIRED, 'What resource are you looking for?')
-        ;
+            ->setDescription('Returns the filesystem absolute path for resource name or path')
+            ->addArgument('lookup', InputArgument::REQUIRED, 'What resource are you looking for?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // gather arguments and options
-        $resource_name = $input->getArgument('resource_name');
+        $lookup = $input->getArgument('lookup');
 
         // gather services
         $container = $this->getContainer();
         $controller = $container->get('bp.code.helpers');
 
-        // perform path lookup
-        $resource_path = $controller->resourcePathAction($resource_name);
+        $resource_path = $lookup;
+
+        // map lookup to path if needed
+        if ($lookup[0] !== '@') {
+            $resource_path = $controller->resourcePathAction($lookup);
+        }
+
         $file_path = $controller->resourceLocateAction($resource_path);
 
         $output->writeln($file_path);
