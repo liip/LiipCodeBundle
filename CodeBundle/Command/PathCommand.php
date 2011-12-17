@@ -1,6 +1,7 @@
 <?php
 namespace Bp\CodeBundle\Command;
 
+use Bp\CodeBundle\Model\Lookup;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,7 +13,7 @@ class PathCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('code:resource:path')
+            ->setName('code:path')
             ->setDescription('Returns the resource path for template logical name')
             ->addArgument('lookup', InputArgument::REQUIRED, 'What template are you looking for?')
         ;
@@ -21,14 +22,10 @@ class PathCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // gather arguments and options
-        $lookup = $input->getArgument('lookup');
-
-        // gather services
-        $container = $this->getContainer();
-        $controller = $container->get('bp.code.helpers');
+        $lookup = new Lookup($input->getArgument('lookup'), $this->getContainer());
 
         // perform resource lookup
-        $resource_path = $controller->resourcePathAction($lookup);
+        $resource_path = $lookup->getPath();
 
         $output->writeln($resource_path);
     }
