@@ -10,6 +10,7 @@ class Lookup
     const LT_PATH = 'path';
     const LT_NAME = 'name';
     const RT_TEMPLATE = 'template';
+    const RT_CLASS = 'class';
 
     protected $lookup;
     protected $lookup_type;
@@ -38,6 +39,12 @@ class Lookup
             $this->lookup_type = Lookup::LT_PATH;
         }
 
+        // identify class names of the form \Path\To\My\Class
+        if (strpos($this->lookup, '\\')) {
+            $this->lookup_type = Lookup::LT_NAME;
+            $this->resource_type = Lookup::RT_CLASS;
+        }
+
         // identify template names of the form MyBundle:folder:template
         if (strpos($this->lookup, ':')) {
             $this->lookup_type = Lookup::LT_NAME;
@@ -61,6 +68,20 @@ class Lookup
     }
 
     /*
+     * @return string path of class
+     */
+    public function getClassPath()
+    {
+        // access autoloader
+        $loaders = spl_autoload_functions();
+        $loader = $loaders[0][0];
+
+        $path = $loader->findFile($this->lookup);
+
+        return $path;
+    }
+
+    /*
      * @return string path of looked up resource
      * TODO extend to other resources that templates
      */
@@ -73,7 +94,15 @@ class Lookup
         }
 
         if ($this->lookup_type == Lookup::LT_NAME) {
-            $path = $this->getTemplatePath();
+
+            if ($this->resource_type == Lookup::RT_TEMPLATE) {
+                $path = $this->getTemplatePath();
+            }
+
+            if ($this->resource_type == Lookup::RT_CLASS) {
+                $path = $this->getClassPath();
+            }
+
         }
 
         return $path;
