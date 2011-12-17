@@ -52,6 +52,7 @@ Locate a twig template by name:
     => /path/to/symfony2-root/src/Acme/DemoBundle/Resources/views/Demo/hello.html.twig
 
 Locate a class by name:
+
     app/console code:locate "Acme\DemoBundle\ControllerListener"
     => /path/to/symfony2-root/src/Acme/DemoBundle/ControllerListener.php
 
