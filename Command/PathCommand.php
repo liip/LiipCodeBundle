@@ -2,26 +2,25 @@
 namespace Liip\CodeBundle\Command;
 
 use Liip\CodeBundle\Model\Lookup;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PathCommand extends ContainerAwareCommand
+class PathCommand extends CodeCommand
 {
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('code:path')
-            ->setDescription('Get the symfony path for a named resource')
-            ->addArgument('lookup', InputArgument::REQUIRED, 'What resource are you looking for?');
+            ->setDescription('Get the symfony path for a named resource');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // gather arguments and options
-        $lookup = new Lookup($input->getArgument('lookup'), $this->getContainer());
+        $lookup = new Lookup($input->getArgument('lookup'), $input->getOption('type'), $this->getContainer());
 
         // perform resource lookup
         $resource_path = $lookup->getPath();

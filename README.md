@@ -53,6 +53,16 @@ This bundles provides several Symfony2 console commands:
 *  __code:locate__ finds the file corresponding to a class, template, etc.
 *  __code:edit__ edits the file corresponding to a class, template, etc.
 
+## Common options
+
+The option `--type (class|service|template)` can be used in case of ambiguous lookup:
+
+    # templating engine service name is ambiguous
+    # the following triggers an AmbiguousLookupException
+    app/console code:locate templating
+    # add type option to resolve ambiguity
+    app/console code:edit templating --type service
+
 ## code:path
 
 Returns the "symfony path" of something based on its "name".

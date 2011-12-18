@@ -17,6 +17,7 @@ class Lookup
     protected $lookup;
     protected $lookup_type;
     protected $resource_type;
+    protected $resource_types;
     protected $container;
 
     /**
@@ -24,21 +25,46 @@ class Lookup
      *
      * @param string $lookup
      */
-    public function __construct($lookup, $container)
+    public function __construct($lookup, $resource_type, $container)
     {
         $this->lookup = $lookup;
         $this->container = $container;
-        $this->typify();
+        $this->resource_types = array(
+           Lookup::RT_TEMPLATE,
+           Lookup::RT_CLASS,
+           Lookup::RT_SERVICE,
+        );
+
+        $this->typify($resource_type);
+    }
+    /*
+     * Returns allowed type option values
+     */
+    public function getTypeOptionSyntax()
+    {
+        return sprintf('(%s)', implode($this->resource_types, '|'));
     }
 
     /*
      * Identifies the types of the lookup and corresponding resource
+     * @param string $resource_type optional resource type indication
      */
-    public function typify()
+    public function typify($resource_type = null)
     {
         // identify symfony paths of the form @MyBundle/../..
         if ($this->lookup[0] === '@') {
             $this->lookup_type = Lookup::LT_PATH;
+            return;
+        }
+
+        if ($resource_type) {
+            var_dump($resource_type);
+            if (!in_array($resource_type, $this->resource_types)) {
+                throw new AmbiguousLookupException(sprintf("'%s' is not a valid resource type indication.\nUse '--type %s' option to indicate the looked up resource type.", $this->getTypeOptionSyntax(), $this->lookup));
+            }
+
+            $this->lookup_type = Lookup::LT_NAME;
+            $this->resource_type = $resource_type;
             return;
         }
 
@@ -63,7 +89,7 @@ class Lookup
             return;
         }
 
-        throw new AmbiguousLookupException(sprintf("No type could be determined for '%s'.\nUse '--type (class|template|service)' option to indicate the looked up resource type.", $this->lookup));
+        throw new AmbiguousLookupException(sprintf("No type could be determined for '%s'.\nUse '--type %s' option to indicate the looked up resource type.", $this->getTypeOptionSyntax(), $this->lookup));
     }
 
     /*
