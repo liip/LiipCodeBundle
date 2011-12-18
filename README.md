@@ -1,7 +1,6 @@
 # Introduction
 
-A Symfony2 developer tool to cope with the various ways of identifying classes, templates, etc.
-Provides console commands to find the filepath for some class, template, bundle, ...
+A set of Symfony2 developer commands to cope with the various ways of identifying classes, templates, bundles, services, etc. Provides console commands to find their filepath and editor shortcuts.
 
 # Installation
 
