@@ -111,7 +111,7 @@ class Lookup
     /*
      * @return string its file system absolute path
      */
-    public function locate()
+    public function getFilePath()
     {
         // access services
         $locator = $this->container->get('file_locator');

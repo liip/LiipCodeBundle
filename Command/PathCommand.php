@@ -14,8 +14,8 @@ class PathCommand extends ContainerAwareCommand
     {
         $this
             ->setName('code:path')
-            ->setDescription('Returns the resource path for template logical name')
-            ->addArgument('lookup', InputArgument::REQUIRED, 'What template are you looking for?');
+            ->setDescription('Get the symfony path for a named resource')
+            ->addArgument('lookup', InputArgument::REQUIRED, 'What resource are you looking for?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

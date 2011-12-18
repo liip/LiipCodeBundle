@@ -14,7 +14,7 @@ class LocateCommand extends ContainerAwareCommand
     {
         $this
             ->setName('code:locate')
-            ->setDescription('Returns the filesystem absolute path for resource name or path')
+            ->setDescription('Find the filepath of a named resource')
             ->addArgument('lookup', InputArgument::REQUIRED, 'What resource are you looking for?');
     }
 
@@ -22,7 +22,7 @@ class LocateCommand extends ContainerAwareCommand
     {
         $lookup = new Lookup($input->getArgument('lookup'), $this->getContainer());
 
-        $file_path = $lookup->locate();
+        $file_path = $lookup->getFilePath();
 
         $output->writeln($file_path);
     }
