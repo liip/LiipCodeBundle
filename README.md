@@ -63,12 +63,14 @@ Symfony path for a template:
     app/console code:path AcmeDemoBundle:Demo:hello.html.twig
     => @AcmeDemoBundle/Resources/views/Demo/hello.html.twig
 
-Note that the template does not need to exist:
+Note that, in the case of a template, it does not need to exist:
 
     app/console code:path AcmeDemoBundle:Dummy:dummy.html.twig
     => @AcmeDemoBundle/Resources/views/Dummy/dummy.html.twig
 
 ... useful when you need to create a template and don't remember where to put it.
+
+For resources other than templates, code:path is synonymous to code:locate.
 
 ## code:locate
 
@@ -88,6 +90,13 @@ Locate a class by name:
 
 Note that the class name must be wrapped in quotes.
 Currently only classes managed by the Symfony2 autoloader will be picked.
+
+Locate a service by id:
+
+    app/console code:locate acme.demo.listener
+    => /path/to/symfony2-root/src/Acme/DemoBundle/ControllerListener.php
+
+You may also want to have a look at the container:debug command, which allows you to inspect services in a deeper manner.
 
 ### Locate by "symfony path"
 

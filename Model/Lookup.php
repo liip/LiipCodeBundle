@@ -11,6 +11,7 @@ class Lookup
     const LT_NAME = 'name';
     const RT_TEMPLATE = 'template';
     const RT_CLASS = 'class';
+    const RT_SERVICE = 'service';
 
     protected $lookup;
     protected $lookup_type;
@@ -37,53 +38,78 @@ class Lookup
         // identify symfony paths of the form @MyBundle/../..
         if ($this->lookup[0] === '@') {
             $this->lookup_type = Lookup::LT_PATH;
+            return;
         }
 
         // identify class names of the form \Path\To\My\Class
         if (strpos($this->lookup, '\\')) {
             $this->lookup_type = Lookup::LT_NAME;
             $this->resource_type = Lookup::RT_CLASS;
+            return;
         }
 
         // identify template names of the form MyBundle:folder:template
         if (strpos($this->lookup, ':')) {
             $this->lookup_type = Lookup::LT_NAME;
             $this->resource_type = Lookup::RT_TEMPLATE;
+            return;
+        }
+
+        // identify service names of the form my.service.name.space
+        if (strpos($this->lookup, '.')) {
+            $this->lookup_type = Lookup::LT_NAME;
+            $this->resource_type = Lookup::RT_SERVICE;
+            return;
         }
     }
 
     /*
-     * @return string path of template resource
+     * param $name the template logical name
+     * @return string path
      */
-    public function getTemplatePath()
+    public function getTemplatePath($name)
     {
         // access services
         $parser = $this->container->get('templating.name_parser');
 
         // map template logicalName to symfony resource path
-        $template_reference = $parser->parse($this->lookup);
+        $template_reference = $parser->parse($name);
         $path = $template_reference->getPath();
 
         return $path;
     }
 
     /*
+     * param $name the class name
      * @return string path of class
      */
-    public function getClassPath()
+    public function getClassPath($name)
     {
         // access autoloader
         $loaders = spl_autoload_functions();
         $loader = $loaders[0][0];
 
-        $path = $loader->findFile($this->lookup);
+        $path = $loader->findFile($name);
+
+        return $path;
+    }
+
+    /*
+     * param $name the service id
+     * @return string path of a service
+     */
+    public function getServicePath($name)
+    {
+        // access service
+        $service = $this->container->get($name);
+        $class = get_class($service);
+        $path = $this->getClassPath($class);
 
         return $path;
     }
 
     /*
      * @return string path of looked up resource
-     * TODO extend to other resources that templates
      */
     public function getPath()
     {
@@ -96,11 +122,15 @@ class Lookup
         if ($this->lookup_type == Lookup::LT_NAME) {
 
             if ($this->resource_type == Lookup::RT_TEMPLATE) {
-                $path = $this->getTemplatePath();
+                $path = $this->getTemplatePath($this->lookup);
             }
 
             if ($this->resource_type == Lookup::RT_CLASS) {
-                $path = $this->getClassPath();
+                $path = $this->getClassPath($this->lookup);
+            }
+
+            if ($this->resource_type == Lookup::RT_SERVICE) {
+                $path = $this->getServicePath($this->lookup);
             }
 
         }
