@@ -35,6 +35,13 @@ Add this bundle to your application kernel, as a development/test bundle:
         );
     }
 
+Configure the code:edit command to work with your favorite editor:
+
+    ;app/config/parameters.ini
+    [parameters]
+        ; ...
+        bp_code.edit_command="vim -f"
+
 Type `app/console` and check that new commands are available of the form `code:*`
 
 This bundle currently defines no routes, nor does it require configuration.
@@ -42,8 +49,25 @@ This bundle currently defines no routes, nor does it require configuration.
 # Usage
 
 This bundles provides several Symfony2 console commands:
-*  code:locate find the file corresponding to a class, template, etc.
-*  code:path get the symfony path corresponding to a class, template, etc.
+*  __code:path__ gets the symfony path corresponding to a class, template, etc.
+*  __code:locate__ finds the file corresponding to a class, template, etc.
+*  __code:edit__ edits the file corresponding to a class, template, etc.
+
+## code:path
+
+Returns the "symfony path" of something based on its "name".
+
+Symfony path for a template:
+
+    app/console code:path AcmeDemoBundle:Demo:hello.html.twig
+    => @AcmeDemoBundle/Resources/views/Demo/hello.html.twig
+
+Note that the template does not need to exist:
+
+    app/console code:path AcmeDemoBundle:Dummy:dummy.html.twig
+    => @AcmeDemoBundle/Resources/views/Dummy/dummy.html.twig
+
+... useful when you need to create a template and don't remember where to put it.
 
 ## code:locate
 
@@ -81,19 +105,7 @@ Locate a file:
     app/console code:locate @AcmeDemoBundle/Resources/views/Demo/hello.html.twig
     => /path/to/symfony2-root/src/Acme/DemoBundle/Resources/views/Demo/hello.html.twig
 
+## code:edit
 
-## code:path
+Locates and edits the file corresponding to a class, template, etc.
 
-Returns the "symfony path" of something based on its "name".
-
-Symfony path for a template:
-
-    app/console code:path AcmeDemoBundle:Demo:hello.html.twig
-    => @AcmeDemoBundle/Resources/views/Demo/hello.html.twig
-
-Note that the template does not need to exist:
-
-    app/console code:path AcmeDemoBundle:Dummy:dummy.html.twig
-    => @AcmeDemoBundle/Resources/views/Dummy/dummy.html.twig
-
-... useful when you need to create a template and don't remember where to put it.
