@@ -23,7 +23,7 @@ Add its namespace to your autoloader:
         // ...
     ));
 
-Add this bundle to your application kernel, as a dev-mode-only bundle:
+Add this bundle to your application kernel, as a development/test bundle:
 
     // app/AppKernel.php
     public function registerBundles()
@@ -35,13 +35,15 @@ Add this bundle to your application kernel, as a dev-mode-only bundle:
         );
     }
 
-Type `app/console` and check that new commands have been added of the form `code:*`
+Type `app/console` and check that new commands are available of the form `code:*`
 
 This bundle currently defines no routes, nor does it require configuration.
 
 # Usage
 
 This bundles provides several Symfony2 console commands:
+*  code:locate find the file corresponding to a class, template, etc.
+*  code:path get the symfony path corresponding to a class, template, etc.
 
 ## code:locate
 
