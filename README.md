@@ -5,16 +5,16 @@ Provides console commands to find the filepath for some class, template, bundle,
 
 # Installation
 
-1. Add this bundle to your project as Git submodule:
+Add this bundle to your project as Git submodule:
 
-    $ git submodule add git://github.com/benoitpointet/BpCodeBundle.git vendor/bundles/Bp/CodeBundle
+    git submodule add git://github.com/benoitpointet/BpCodeBundle.git vendor/bundles/Bp/CodeBundle
 
-2. Initialize the git submodule
+Initialize the git submodule
 
-    $ git submodule init
-    $ git submodule update
+    git submodule init
+    git submodule update
 
-3. Add its namespace to your autoloader:
+Add its namespace to your autoloader:
 
     // app/autoload.php
     $loader->registerNamespaces(array(
@@ -22,7 +22,7 @@ Provides console commands to find the filepath for some class, template, bundle,
         // your other namespaces
     ));
 
-4. Add this bundle to your application's kernel:
+Add this bundle to your application's kernel:
 
     // application/ApplicationKernel.php
     public function registerBundles()
@@ -34,7 +34,7 @@ Provides console commands to find the filepath for some class, template, bundle,
         );
     }
 
-5. For now, this bundle defines no routes, nor does it require configuration.
+This bundle currently defines no routes, nor does it require configuration.
 
 # Usage
 
