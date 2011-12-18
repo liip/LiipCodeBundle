@@ -49,6 +49,7 @@ This bundle currently defines no routes, nor does it require configuration.
 # Usage
 
 This bundles provides several Symfony2 console commands:
+
 *  __code:path__ gets the symfony path corresponding to a class, template, etc.
 *  __code:locate__ finds the file corresponding to a class, template, etc.
 *  __code:edit__ edits the file corresponding to a class, template, etc.
