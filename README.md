@@ -61,7 +61,7 @@ The option `--type (class|service|template)` can be used in case of ambiguous lo
     app/console code:locate templating
 
     # add type option to resolve ambiguity
-    app/console code:edit templating --type service
+    app/console code:locate templating --type service
 
 ## code:path
 
