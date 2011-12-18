@@ -57,9 +57,9 @@ This bundles provides several Symfony2 console commands:
 
 The option `--type (class|service|template)` can be used in case of ambiguous lookup:
 
-    # templating engine service name is ambiguous
-    # the following triggers an AmbiguousLookupException
+    # templating engine service name is ambiguous, the following triggers an AmbiguousLookupException
     app/console code:locate templating
+
     # add type option to resolve ambiguity
     app/console code:edit templating --type service
 
