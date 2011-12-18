@@ -18,21 +18,24 @@ Add its namespace to your autoloader:
 
     // app/autoload.php
     $loader->registerNamespaces(array(
+        // ...
         'Bp' => __DIR__.'/../vendor/bundles',
-        // your other namespaces
+        // ...
     ));
 
-Add this bundle to your application's kernel:
+Add this bundle to your application kernel, as a dev-mode-only bundle:
 
-    // application/ApplicationKernel.php
+    // app/AppKernel.php
     public function registerBundles()
     {
-        return array(
+        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             // ...
-            new Bp\CodeBundle\BpCodeBundle(),
+            $bundles[] = new Bp\CodeBundle\BpCodeBundle();
             // ...
         );
     }
+
+Type `app/console` and check that new commands have been added of the form `code:*`
 
 This bundle currently defines no routes, nor does it require configuration.
 
