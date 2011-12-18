@@ -2,6 +2,7 @@
 
 namespace Liip\CodeBundle\Model;
 
+use Liip\CodeBundle\Exception\AmbiguousLookupException;
 /*
  * A resource lookup
  */
@@ -61,6 +62,8 @@ class Lookup
             $this->resource_type = Lookup::RT_SERVICE;
             return;
         }
+
+        throw new AmbiguousLookupException(sprintf("No type could be determined for '%s'.\nUse '--type (class|template|service)' option to indicate the looked up resource type.", $this->lookup));
     }
 
     /*
