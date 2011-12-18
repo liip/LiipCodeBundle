@@ -135,6 +135,10 @@ class Lookup
 
         }
 
+        if (! $path) {
+           throw new \InvalidArgumentException(sprintf('Unable to find file of %s "%s"', $this->resource_type, $this->lookup));
+        }
+
         return $path;
     }
 
@@ -143,11 +147,14 @@ class Lookup
      */
     public function getFilePath()
     {
+        // get path
+        $path = $this->getPath();
+
         // access services
         $locator = $this->container->get('file_locator');
 
-        // map template logicalName to symfony path
-        $file_path = $locator->locate($this->getPath());
+        // map path to absolute filepath
+        $file_path = $locator->locate($path);
         return $file_path;
     }
 }
