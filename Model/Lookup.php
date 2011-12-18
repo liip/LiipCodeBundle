@@ -70,9 +70,8 @@ class Lookup
         }
 
         if ($resource_type) {
-            var_dump($resource_type);
             if (!in_array($resource_type, $this->resource_types)) {
-                throw new AmbiguousLookupException(sprintf("'%s' is not a valid resource type indication.\nUse '--type %s' option to indicate the looked up resource type.", $this->getTypeOptionSyntax(), $this->lookup));
+                throw new AmbiguousLookupException(sprintf("'%s' is not a valid resource type indication.\nUse '--type=%s' option to indicate the looked up resource type.", $this->getTypeOptionSyntax(), $this->lookup));
             }
 
             $this->lookup_type = Lookup::LT_NAME;
@@ -101,7 +100,7 @@ class Lookup
             return;
         }
 
-        throw new AmbiguousLookupException(sprintf("No type could be determined for '%s'.\nUse '--type %s' option to indicate the looked up resource type.", $this->getTypeOptionSyntax(), $this->lookup));
+        throw new AmbiguousLookupException(sprintf("No type could be determined for '%s'.\nUse '--type=%s' option to indicate the looked up resource type.", $this->getTypeOptionSyntax(), $this->lookup));
     }
 
     /*
