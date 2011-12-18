@@ -1,8 +1,18 @@
 <?php
 
+/*
+ * This file is part of the Liip/CodeBundle
+ *
+ * (c) 2011 Benoit Pointet <benoit.pointet@liip.ch>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Liip\CodeBundle\Model;
 
 use Liip\CodeBundle\Exception\AmbiguousLookupException;
+
 /*
  * A resource lookup
  */
@@ -23,7 +33,9 @@ class Lookup
     /**
      * Constructor
      *
-     * @param string $lookup
+     * @param string $lookup Some lookup string: either a name, id, ...
+     * @param string $resource_type Type of the resource looked up
+     * @param string $container
      */
     public function __construct($lookup, $resource_type, $container)
     {
@@ -38,7 +50,7 @@ class Lookup
         $this->typify($resource_type);
     }
     /*
-     * Returns allowed type option values
+     * @return allowed type option values
      */
     public function getTypeOptionSyntax()
     {
