@@ -109,4 +109,11 @@ Locate a file:
 ## code:edit
 
 Locates and edits the file corresponding to a class, template, etc.
+Don't forget to configure CodeBundle to work with your favorite editor (see installation instructions).
 
+Edit a twig template:
+
+    app/console code:edit AcmeDemoBundle:Demo:hello.html.twig
+    => locates and opens the template source file in editor
+
+See code:locate instructions above for more infos.
