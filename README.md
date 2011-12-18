@@ -7,7 +7,7 @@ Provides console commands to find the filepath for some class, template, bundle,
 
 Add this bundle to your project as Git submodule:
 
-    git submodule add git://github.com/benoitpointet/BpCodeBundle.git vendor/bundles/Bp/CodeBundle
+    git submodule add git://github.com/benoitpointet/LiipCodeBundle.git vendor/bundles/Liip/CodeBundle
 
 Initialize the git submodule
 
@@ -19,7 +19,7 @@ Add its namespace to your autoloader:
     // app/autoload.php
     $loader->registerNamespaces(array(
         // ...
-        'Bp' => __DIR__.'/../vendor/bundles',
+        'Liip' => __DIR__.'/../vendor/bundles',
         // ...
     ));
 
@@ -30,7 +30,7 @@ Add this bundle to your application kernel, as a development/test bundle:
     {
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             // ...
-            $bundles[] = new Bp\CodeBundle\BpCodeBundle();
+            $bundles[] = new Liip\CodeBundle\LiipCodeBundle();
             // ...
         );
     }
@@ -40,7 +40,7 @@ Configure the code:edit command to work with your favorite editor:
     ;app/config/parameters.ini
     [parameters]
         ; ...
-        bp_code.edit_command="vim -f"
+        liip.code.edit_command="vim -f"
 
 Type `app/console` and check that new commands are available of the form `code:*`
 

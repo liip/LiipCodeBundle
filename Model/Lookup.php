@@ -1,6 +1,6 @@
 <?php
 
-namespace Bp\CodeBundle\Model;
+namespace Liip\CodeBundle\Model;
 
 /*
  * A resource lookup

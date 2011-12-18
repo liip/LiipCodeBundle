@@ -1,7 +1,7 @@
 <?php
-namespace Bp\CodeBundle\Command;
+namespace Liip\CodeBundle\Command;
 
-use Bp\CodeBundle\Model\Lookup;
+use Liip\CodeBundle\Model\Lookup;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

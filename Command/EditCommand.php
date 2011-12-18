@@ -1,7 +1,7 @@
 <?php
-namespace Bp\CodeBundle\Command;
+namespace Liip\CodeBundle\Command;
 
-use Bp\CodeBundle\Model\Lookup;
+use Liip\CodeBundle\Model\Lookup;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,7 +25,7 @@ class EditCommand extends ContainerAwareCommand
 
         // perform resource lookup
         $resource_file = $lookup->getFilePath();
-        $edit_prefix = $this->getContainer()->getParameter('bp_code.edit_command');
+        $edit_prefix = $this->getContainer()->getParameter('liip.code.edit_command');
         $edit_command = escapeshellcmd(sprintf('%s %s', $edit_prefix, $resource_file));
         passthru($edit_command, $return_code);
         return $return_code;
