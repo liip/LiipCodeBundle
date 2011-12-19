@@ -1,6 +1,6 @@
 # Introduction
 
-A set of Symfony2 developer commands to cope with the various ways of identifying classes, templates, bundles, services, etc. Provides console commands to find their filepath and editor shortcuts.
+A set of Symfony2 console commands to help developers deal with the various ways of identifying classes, templates, bundles, services, etc. Provides console commands to find their filepath and editor shortcuts.
 
 # Installation
 
@@ -34,14 +34,23 @@ Add this bundle to your application kernel, as a development/test bundle:
         );
     }
 
-Configure the code:edit command to work with your favorite editor:
+Configure the `code:edit` console command to work with your favorite editor:
 
     ;app/config/parameters.ini
     [parameters]
         ; ...
         liip.code.edit_command="vim -f"
 
-Type `app/console` and check that new commands are available of the form `code:*`
+In this example, the `app/console code:edit some_resource_name` command will indeed lookup the resource and execute `vim -f /path/to/the/corresponding/file`.
+
+Do the same to hook `code:view` to your favorite code viewer:
+
+    ;app/config/parameters.ini
+    [parameters]
+        ; ...
+        liip.code.view_command="view -f"
+
+Type `app/console` and check that new console commands are available of the form `code:*`
 
 This bundle currently defines no routes, nor does it require configuration.
 
@@ -49,9 +58,9 @@ This bundle currently defines no routes, nor does it require configuration.
 
 This bundles provides several Symfony2 console commands:
 
-*  __code:path__ gets the symfony path corresponding to a class, template, etc.
-*  __code:locate__ finds the file corresponding to a class, template, etc.
-*  __code:edit__ edits the file corresponding to a class, template, etc.
+*  `code:path` gets the symfony path corresponding to a class, template, etc.
+*  `code:locate` finds the file corresponding to a class, template, etc.
+*  `code:edit` edits the file corresponding to a class, template, etc.
 
 ## Common options
 
@@ -79,7 +88,7 @@ Note that, in the case of a template, it does not need to exist:
 
 ... useful when you need to create a template and don't remember where to put it.
 
-For resources other than templates, code:path is synonymous to code:locate.
+For resources other than templates, `code:path` is synonymous to code:locate.
 
 ## code:locate
 
@@ -105,7 +114,7 @@ Locate a service by id:
     app/console code:locate acme.demo.listener
     => /path/to/symfony2-root/src/Acme/DemoBundle/ControllerListener.php
 
-You may also want to have a look at the container:debug command, which allows you to inspect services in a deeper manner.
+You may also want to have a look at the `ccontainer:debug` console command, which allows you to inspect services in a deeper manner.
 
 ### Locate by "symfony path"
 
@@ -135,3 +144,8 @@ Edit a twig template:
     => locates and opens the template source file in editor
 
 See code:locate instructions above for more infos.
+
+## code:view
+
+Locates and displays the file corresponding to a class, template, etc.
+Works exactly the same as the `code:edit` console command, still handy if you want to make sure you don't mess around while browsing code.
