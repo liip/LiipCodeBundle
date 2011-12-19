@@ -1,6 +1,12 @@
 # Introduction
 
-A set of Symfony2 console commands to help developers deal with the various ways of identifying classes, templates, bundles, services, etc. Provides console commands to find their filepath and editor shortcuts.
+A set of Symfony2 console commands to help developers deal with the various ways of identifying classes, templates, bundles, services, etc. Provides console commands to find their file path or class, as well as editor shortcuts.
+
+*  `code:path` outputs the symfony path corresponding to a class, service, template, etc.
+*  `code:locate` finds the file corresponding to a class, service, template, etc.
+*  `code:class` outputs the class of a service.
+*  `code:edit` edits the file corresponding to a class, service, template, etc.
+*  `code:view` displays the file corresponding to a class, service, template, etc.
 
 # Installation
 
@@ -55,14 +61,6 @@ Type `app/console` and check that new console commands are available of the form
 This bundle currently defines no routes, nor does it require configuration.
 
 # Usage
-
-This bundles provides several Symfony2 console commands:
-
-*  `code:path` outputs the symfony path corresponding to a class, service, template, etc.
-*  `code:locate` finds the file corresponding to a class, service, template, etc.
-*  `code:class` outputs the class of a service.
-*  `code:edit` edits the file corresponding to a class, service, template, etc.
-*  `code:view` displays the file corresponding to a class, service, template, etc.
 
 ## Common options
 
