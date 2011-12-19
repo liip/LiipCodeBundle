@@ -58,9 +58,11 @@ This bundle currently defines no routes, nor does it require configuration.
 
 This bundles provides several Symfony2 console commands:
 
-*  `code:path` gets the symfony path corresponding to a class, template, etc.
-*  `code:locate` finds the file corresponding to a class, template, etc.
-*  `code:edit` edits the file corresponding to a class, template, etc.
+*  `code:path` outputs the symfony path corresponding to a class, service, template, etc.
+*  `code:locate` finds the file corresponding to a class, service, template, etc.
+*  `code:class` outputs the class of a service.
+*  `code:edit` edits the file corresponding to a class, service, template, etc.
+*  `code:view` displays the file corresponding to a class, service, template, etc.
 
 ## Common options
 
@@ -132,6 +134,13 @@ Locate a file:
 
     app/console code:locate @AcmeDemoBundle/Resources/views/Demo/hello.html.twig
     => /path/to/symfony2-root/src/Acme/DemoBundle/Resources/views/Demo/hello.html.twig
+
+## code:class
+
+Obtain the class of a service:
+
+    app/console code:class acme.demo.listener
+    => Acme\DemoBundle\ControllerListener
 
 ## code:edit
 

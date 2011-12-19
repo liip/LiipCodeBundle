@@ -104,10 +104,54 @@ class Lookup
     }
 
     /*
+     * return the class namespace/name
+     */
+    public function getClass() {
+
+        $class = null;
+
+        if ($this->lookup_type == Lookup::LT_PATH) {
+            // TODO handle this case
+        }
+
+        if ($this->lookup_type == Lookup::LT_NAME) {
+
+            if ($this->resource_type == Lookup::RT_CLASS) {
+                $class = $this->lookup;
+            }
+
+            if ($this->resource_type == Lookup::RT_SERVICE) {
+                $class = $this->getServiceClass($this->lookup);
+            }
+
+        }
+
+        if (! $class) {
+           throw new \InvalidArgumentException(sprintf('Unable to find class of %s "%s"', $this->resource_type, $this->lookup));
+        }
+
+        return $class;
+
+    }
+
+    /*
+     * param $name the service id
+     * @return class of a service
+     */
+    protected function getServiceClass($name)
+    {
+        // access service
+        $service = $this->container->get($name);
+        $class = get_class($service);
+
+        return $class;
+    }
+
+    /*
      * param $name the template logical name
      * @return string path
      */
-    public function getTemplatePath($name)
+    protected function getTemplatePath($name)
     {
         // access services
         $parser = $this->container->get('templating.name_parser');
@@ -123,7 +167,7 @@ class Lookup
      * param $name the class name
      * @return string path of class
      */
-    public function getClassPath($name)
+    protected function getClassPath($name)
     {
         // access autoloader
         $loaders = spl_autoload_functions();
@@ -138,7 +182,7 @@ class Lookup
      * param $name the service id
      * @return string path of a service
      */
-    public function getServicePath($name)
+    protected function getServicePath($name)
     {
         // access service
         $service = $this->container->get($name);
