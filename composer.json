@@ -1,0 +1,31 @@
+{
+    "name": "liip/code-bundle",
+    "type": "symfony-bundle",
+    "description": "Liip Code Bundle",
+    "keywords": ["debug", "development"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Benoit Pointet",
+            "email": "benoit.pointet@liip.ch"
+        },
+        {
+            "name": "Symfony Community",
+            "homepage": "https://github.com/liip/LiipCodeBundle/contributors"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/framework-bundle": ">2.0,<2.3-dev"
+    },
+    "autoload": {
+        "psr-0": { "Liip\\CodeBundle": "" }
+    },
+    "target-dir": "Liip/CodeBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.5.x-dev"
+        }
+    }
+}

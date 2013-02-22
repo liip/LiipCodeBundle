@@ -1,6 +1,7 @@
 # Introduction
 
-A set of Symfony2 console commands to help developers deal with the various ways of identifying classes, templates, bundles, services, etc. Provides console commands to find their file path or class, as well as editor shortcuts.
+A set of Symfony2 console commands to help developers deal with the various ways of identifying classes, templates,
+bundles, services, etc. Provides console commands to find their file path or class, as well as editor shortcuts.
 
 *  `code:path` outputs the symfony path corresponding to a class, service, template, etc.
 *  `code:locate` finds the file corresponding to a class, service, template, etc.
@@ -8,53 +9,41 @@ A set of Symfony2 console commands to help developers deal with the various ways
 *  `code:edit` edits the file corresponding to a class, service, template, etc.
 *  `code:view` displays the file corresponding to a class, service, template, etc.
 
-# Installation
+## Installation ##
 
-Add this bundle to your project as Git submodule:
+Add the following code to your ```composer.json``` file:
 
-    git submodule add git://github.com/benoitpointet/LiipCodeBundle.git vendor/bundles/Liip/CodeBundle
+    "require": {
+        ..
+        "liip/code-bundle": "dev-master"
+    },
 
-Initialize the git submodule
+And then run the Composer update command:
 
-    git submodule init
-    git submodule update
+    $ php composer.phar update liip/code-bundle
 
-Add its namespace to your autoloader:
+Then register the bundle in the `AppKernel.php` file:
 
-    // app/autoload.php
-    $loader->registerNamespaces(array(
-        // ...
-        'Liip' => __DIR__.'/../vendor/bundles',
-        // ...
-    ));
-
-Add this bundle to your application kernel, as a development/test bundle:
-
-    // app/AppKernel.php
     public function registerBundles()
     {
-        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
-            // ...
-            $bundles[] = new Liip\CodeBundle\LiipCodeBundle();
-            // ...
+        $bundles = array(
+            ...
+            new Liip\CodeBundle\LiipCodeBundle(),
+            ...
         );
+
+        return $bundles;
     }
 
-Configure the `code:edit` console command to work with your favorite editor:
+Configure the `code:edit` and `code:view` console command to work with your favorite editor:
 
-    ;app/config/parameters.ini
-    [parameters]
-        ; ...
-        liip.code.edit_command="vim -f"
+```yml
+liip_code:
+    edit_command: "vim -f"
+    view_command: "vim -f"
+```
 
 In this example, the `app/console code:edit some_resource_name` command will indeed lookup the resource and execute `vim -f /path/to/the/corresponding/file`.
-
-Do the same to hook `code:view` to your favorite code viewer:
-
-    ;app/config/parameters.ini
-    [parameters]
-        ; ...
-        liip.code.view_command="view -f"
 
 Type `app/console` and check that new console commands are available of the form `code:*`
 

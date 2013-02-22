@@ -42,7 +42,7 @@ class ViewCommand extends CodeCommand
         $resource_file = $lookup->getFilePath();
 
         // edit file
-        $edit_prefix = $this->getContainer()->getParameter('liip.code.view_command');
+        $edit_prefix = $this->getContainer()->getParameter('liip_code.view_command');
         $edit_command = escapeshellcmd(sprintf('%s %s', $edit_prefix, $resource_file));
         passthru($edit_command, $return_code);
         return $return_code;
