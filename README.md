@@ -103,7 +103,7 @@ Locate a service by id:
     app/console code:locate acme.demo.listener
     => /path/to/symfony2-root/src/Acme/DemoBundle/ControllerListener.php
 
-You may also want to have a look at the `ccontainer:debug` console command, which allows you to inspect services in a deeper manner.
+You may also want to have a look at the `container:debug` console command, which allows you to inspect services in a deeper manner.
 
 ### Locate by "symfony path"
 
