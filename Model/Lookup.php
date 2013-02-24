@@ -13,6 +13,8 @@ namespace Liip\CodeBundle\Model;
 
 use Liip\CodeBundle\Exception\AmbiguousLookupException;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /*
  * A resource lookup
  */
@@ -25,78 +27,77 @@ class Lookup
     const RT_SERVICE = 'service';
 
     protected $lookup;
-    protected $lookup_type;
-    protected $resource_type;
-    protected $resource_types;
+    protected $lookupType;
+    protected $resourceType;
+    protected $resourceTypes = array(
+        Lookup::RT_TEMPLATE,
+        Lookup::RT_CLASS,
+        Lookup::RT_SERVICE,
+    );
     protected $container;
 
     /**
      * Constructor
      *
      * @param string $lookup Some lookup string: either a name, id, ...
-     * @param string $resource_type Type of the resource looked up
+     * @param string $resourceType Type of the resource looked up
      * @param string $container
      */
-    public function __construct($lookup, $resource_type, $container)
+    public function __construct($lookup, $resourceType, ContainerInterface $container)
     {
         $this->lookup = $lookup;
         $this->container = $container;
-        $this->resource_types = array(
-           Lookup::RT_TEMPLATE,
-           Lookup::RT_CLASS,
-           Lookup::RT_SERVICE,
-        );
 
-        $this->typify($resource_type);
+        $this->typify($resourceType);
     }
     /*
      * @return allowed type option values
      */
     public function getTypeOptionSyntax()
     {
-        return sprintf('(%s)', implode($this->resource_types, '|'));
+        return sprintf('(%s)', implode($this->resourceTypes, '|'));
     }
 
     /*
      * Identifies the types of the lookup and corresponding resource
-     * @param string $resource_type optional resource type indication
+     * @param string $resourceType optional resource type indication
      */
-    public function typify($resource_type = null)
+    public function typify($resourceType = null)
     {
         // identify symfony paths of the form @MyBundle/../..
         if ($this->lookup[0] === '@') {
-            $this->lookup_type = Lookup::LT_PATH;
+            $this->lookupType = Lookup::LT_PATH;
             return;
         }
 
-        if ($resource_type) {
-            if (!in_array($resource_type, $this->resource_types)) {
+        if ($resourceType) {
+            if (!in_array($resourceType, $this->resourceTypes)) {
                 throw new AmbiguousLookupException(sprintf("'%s' is not a valid resource type indication.\nUse '--type=%s' option to indicate the looked up resource type.", $this->getTypeOptionSyntax(), $this->lookup));
             }
 
-            $this->lookup_type = Lookup::LT_NAME;
-            $this->resource_type = $resource_type;
+            $this->lookupType = Lookup::LT_NAME;
+            $this->resourceType = $resourceType;
             return;
         }
 
         // identify class names of the form \Path\To\My\Class
         if (strpos($this->lookup, '\\')) {
-            $this->lookup_type = Lookup::LT_NAME;
-            $this->resource_type = Lookup::RT_CLASS;
+            $this->lookupType = Lookup::LT_NAME;
+            $this->resourceType = Lookup::RT_CLASS;
             return;
         }
 
         // identify template names of the form MyBundle:folder:template
         if (strpos($this->lookup, ':')) {
-            $this->lookup_type = Lookup::LT_NAME;
-            $this->resource_type = Lookup::RT_TEMPLATE;
+            $this->lookupType = Lookup::LT_NAME;
+            $this->resourceType = Lookup::RT_TEMPLATE;
             return;
         }
 
         // identify service names of the form my.service.name.space
         if (strpos($this->lookup, '.')) {
-            $this->lookup_type = Lookup::LT_NAME;
-            $this->resource_type = Lookup::RT_SERVICE;
+            $this->lookupType = Lookup::LT_NAME;
+            $this->resourceType = Lookup::RT_SERVICE;
             return;
         }
 
@@ -106,28 +107,26 @@ class Lookup
     /*
      * return the class namespace/name
      */
-    public function getClass() {
-
+    public function getClass()
+    {
         $class = null;
 
-        if ($this->lookup_type == Lookup::LT_PATH) {
+        if ($this->lookupType == Lookup::LT_PATH) {
             // TODO handle this case
         }
 
-        if ($this->lookup_type == Lookup::LT_NAME) {
-
-            if ($this->resource_type == Lookup::RT_CLASS) {
+        if ($this->lookupType == Lookup::LT_NAME) {
+            if ($this->resourceType == Lookup::RT_CLASS) {
                 $class = $this->lookup;
             }
 
-            if ($this->resource_type == Lookup::RT_SERVICE) {
+            if ($this->resourceType == Lookup::RT_SERVICE) {
                 $class = $this->getServiceClass($this->lookup);
             }
-
         }
 
         if (! $class) {
-           throw new \InvalidArgumentException(sprintf('Unable to find class of %s "%s"', $this->resource_type, $this->lookup));
+           throw new \InvalidArgumentException(sprintf('Unable to find class of %s "%s"', $this->resourceType, $this->lookup));
         }
 
         return $class;
@@ -141,10 +140,7 @@ class Lookup
     protected function getServiceClass($name)
     {
         // access service
-        $service = $this->container->get($name);
-        $class = get_class($service);
-
-        return $class;
+        return get_class($this->container->get($name));
     }
 
     /*
@@ -157,10 +153,7 @@ class Lookup
         $parser = $this->container->get('templating.name_parser');
 
         // map template logicalName to symfony resource path
-        $template_reference = $parser->parse($name);
-        $path = $template_reference->getPath();
-
-        return $path;
+        return $parser->parse($name)->getPath();
     }
 
     /*
@@ -169,13 +162,8 @@ class Lookup
      */
     protected function getClassPath($name)
     {
-        // access autoloader
-        $loaders = spl_autoload_functions();
-        $loader = $loaders[0][0];
-
-        $path = $loader->findFile($name);
-
-        return $path;
+        $ref = new \ReflectionClass($name);
+        return $ref->getFileName();
     }
 
     /*
@@ -184,12 +172,7 @@ class Lookup
      */
     protected function getServicePath($name)
     {
-        // access service
-        $service = $this->container->get($name);
-        $class = get_class($service);
-        $path = $this->getClassPath($class);
-
-        return $path;
+        return $this->getClassPath($this->getServiceClass($name));
     }
 
     /*
@@ -199,28 +182,26 @@ class Lookup
     {
         $path = null;
 
-        if ($this->lookup_type == Lookup::LT_PATH) {
+        if ($this->lookupType == Lookup::LT_PATH) {
             $path = $this->lookup;
         }
 
-        if ($this->lookup_type == Lookup::LT_NAME) {
-
-            if ($this->resource_type == Lookup::RT_TEMPLATE) {
+        if ($this->lookupType == Lookup::LT_NAME) {
+            if ($this->resourceType == Lookup::RT_TEMPLATE) {
                 $path = $this->getTemplatePath($this->lookup);
             }
 
-            if ($this->resource_type == Lookup::RT_CLASS) {
+            if ($this->resourceType == Lookup::RT_CLASS) {
                 $path = $this->getClassPath($this->lookup);
             }
 
-            if ($this->resource_type == Lookup::RT_SERVICE) {
+            if ($this->resourceType == Lookup::RT_SERVICE) {
                 $path = $this->getServicePath($this->lookup);
             }
-
         }
 
         if (! $path) {
-           throw new \InvalidArgumentException(sprintf('Unable to find file of %s "%s"', $this->resource_type, $this->lookup));
+           throw new \InvalidArgumentException(sprintf('Unable to find file of %s "%s"', $this->resourceType, $this->lookup));
         }
 
         return $path;
@@ -238,7 +219,6 @@ class Lookup
         $locator = $this->container->get('file_locator');
 
         // map path to absolute filepath
-        $file_path = $locator->locate($path);
-        return $file_path;
+        return $locator->locate($path);
     }
 }
