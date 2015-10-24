@@ -20,9 +20,8 @@
         "symfony/framework-bundle": "~2.0"
     },
     "autoload": {
-        "psr-0": { "Liip\\CodeBundle": "" }
+        "psr-4": { "Liip\\CodeBundle\\": "" }
     },
-    "target-dir": "Liip/CodeBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "0.5.x-dev"
