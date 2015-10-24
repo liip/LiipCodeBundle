@@ -12,16 +12,13 @@
 namespace Liip\CodeBundle\Command;
 
 use Liip\CodeBundle\Model\Lookup;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class LocateCommand extends CodeCommand
 {
-
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -33,7 +30,7 @@ class LocateCommand extends CodeCommand
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -43,5 +40,4 @@ class LocateCommand extends CodeCommand
 
         $output->writeln($file_path);
     }
-
 }

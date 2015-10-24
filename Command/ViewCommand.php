@@ -12,15 +12,13 @@
 namespace Liip\CodeBundle\Command;
 
 use Liip\CodeBundle\Model\Lookup;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ViewCommand extends CodeCommand
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -32,7 +30,7 @@ class ViewCommand extends CodeCommand
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -45,6 +43,7 @@ class ViewCommand extends CodeCommand
         $edit_prefix = $this->getContainer()->getParameter('liip_code.view_command');
         $edit_command = escapeshellcmd(sprintf('%s %s', $edit_prefix, $resource_file));
         passthru($edit_command, $return_code);
+
         return $return_code;
     }
 }
