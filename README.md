@@ -1,3 +1,8 @@
+UNMAINTAINED
+============
+
+This bundle is no longer maintained. Feel free to fork it if needed.
+
 # Introduction
 
 A set of Symfony2 console commands to help developers deal with the various ways of identifying classes, templates,
